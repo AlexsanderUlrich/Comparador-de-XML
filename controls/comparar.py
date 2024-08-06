@@ -1,11 +1,12 @@
 import re
+import flet as ft
 
 # -----------------------------------------------------------------------------------------------------consts com os regex para a pesquisa das informações nos XML 
 
-cpf_regex = re.compile(r"<cpfTrab>(.*?)</cpfTrab>", re.DOTALL) 
+cpf_regex = re.compile(r"<cpfTrab>(.*?)</cpfTrab>", re.DOTALL)
 matricula_regex = re.compile(r"<matricula>(.*?)</matricula>", re.DOTALL)
-data_admissao_regex = re.compile(r"<dtAdm>(.*?)</dtAdm>", re.DOTALL) 
-data_atividade_regex = re.compile(r"<dtIniCondicao>(.*?)</dtIniCondicao>", re.DOTALL) 
+data_admissao_regex = re.compile(r"<dtAdm>(.*?)</dtAdm>", re.DOTALL)
+data_atividade_regex = re.compile(r"<dtIniCondicao>(.*?)</dtIniCondicao>", re.DOTALL)
 
 empregador_regex = re.compile(r"<ideEmpregador>\s+<tpInsc>[12]</tpInsc>\s+<nrInsc>(.*?)</nrInsc>", re.DOTALL)
 local_de_trabalho_regex = re.compile(r"<localTrabGeral>\s+<tpInsc>[134]</tpInsc>\s+<nrInsc>(.*?)</nrInsc>", re.DOTALL)
@@ -23,65 +24,82 @@ def comparador(a, b):
     direito = conteiner(b)
     
     resultado = verificador(esquerdo, direito)    
-    print(resultado)       
+    print(f"teste do resultado dentro do comparador{resultado}")       
 
     return resultado
 
-def verificador(dict1, dict2):
-    divergentes = []  
+# -----------------------------------------------------------------------------------------------------Função que compara as informações dos dois XML:
 
-    # Itera sobre as chaves de dict1
-    for key in dict1:
-        # Verifica se a chave existe em dict2
-        if key in dict2:
+def verificador(xml_esquerdo, xml_direito):
+    divergentes = []
+    texto = []
+      
+
+    # Itera sobre as chaves de xml_esquerdo
+    for item in xml_esquerdo:        
+        # Verifica se a chave existe em xml_direito
+        if item in xml_direito:
             # Compara os valores das chaves correspondentes
-            if dict1[key] != dict2[key]:
-                divergentes.append((key, dict1[key], dict2[key]))
+            if xml_esquerdo[item] != xml_direito[item]:
+                divergentes.append((item, xml_esquerdo[item], xml_direito[item]))
         else:
-            # Se a chave não existe em dict2, considera como divergente
-            divergentes.append((key, dict1[key], None))
+            # Se a chave não existe em xml_direito, considera como divergente
+            divergentes.append((item, xml_esquerdo[item], None))
 
-    # Itera sobre as chaves de dict2 que não foram verificadas em dict1
-    for key in dict2:
-        if key not in dict1:
-            divergentes.append((key, None, dict2[key]))
+    # Itera sobre as chaves de xml_direito que não foram verificadas em xml_esquerdo
+    for item in xml_direito:
+        if item not in xml_esquerdo:
+            divergentes.append((item, None, xml_direito[item]))
 
-    if divergentes:
-        texto = []
-        painel_esquerdo = ""
-        painel_direito = ""
-        for key, val1, val2 in divergentes:
-            painel_esquerdo += f"\n- {key}: {val1}\n"                      
-            painel_direito += f"\n- {key}: {val2}\n"            
+    if divergentes:        
+        painel_esquerdo_dicionario = {}
+        painel_direito_dicionario = {}
+        
+        painel_esquerdo_texto = ""
+        painel_direito_texto = ""
+
+        for item, val1, val2 in divergentes:
+            painel_esquerdo_texto += f"\n- {item}: {val1}\n"#salva o texto dos itens diferntes para a exibição na tela
+            painel_direito_texto += f"\n- {item}: {val2}\n" #salva o texto dos itens diferntes para a exibição na tela
+
+            painel_esquerdo_dicionario[item] = val1 #salva os valores diferentes em um dicionário para poder trabalhar com eles mais fácil
+            painel_direito_dicionario[item] = val2  #salva os valores diferentes em um dicionário para poder trabalhar com eles mais fácil         
     else:        
-        painel_direito +="Os dois estão identicos"        
-        painel_esquerdo +="Os dois estão identicos"        
+        painel_direito_texto = f"Os dois XML estão identicos"        
+        painel_esquerdo_texto = f"Os dois XML estão identicos"
+        painel_direito_dicionario = "Os dois XML estão identicos"       
+        painel_esquerdo_dicionario = "Os dois XML estão identicos"       
+               
     
-    texto.append(painel_esquerdo)
-    texto.append(painel_direito)                                  
+    texto.append(painel_esquerdo_texto)
+    texto.append(painel_direito_texto)
+    texto.append(painel_esquerdo_dicionario)
+    texto.append(painel_direito_dicionario)
+    print(f"Texto enviado de retorno da comparação: {texto}")
     return texto
     
 # -----------------------------------------------------------------------------------------------------conteiner com as informações:
 
-def conteiner(a):
-    empregador_esquerdo = capturar_empregador(a)
-    local_de_trabalho_esquerdo = capturar_local_de_trabalho(a)
-    cpf_esquerdo = capturar_cpf(a)    
-    matricula_esquerda = capturar_matricula(a)
-    data_admissao_esquerda = capturar_data_admissao(a)
-    transf_sucessao = capturar_sucessao_transf(a)
-    mat_sucessao = capturar_sucessao_matricula(a)
-    local_sucessao = capturar_sucessao_local(a)
+def conteiner(xml):
+    empregador = capturar_empregador(xml)
+    local_de_trabalho = capturar_local_de_trabalho(xml)
+    cpf = capturar_cpf(xml)    
+    matricula = capturar_matricula(xml)
+    data_admissao = capturar_data_admissao(xml)
+    transf_sucessao = capturar_sucessao_transf(xml)
+    mat_sucessao = capturar_sucessao_matricula(xml)
+    local_sucessao = capturar_sucessao_local(xml)
 
-    dados = {"Cpf":cpf_esquerdo, 
-             "Matricula":matricula_esquerda, 
-             "Empregador":empregador_esquerdo, 
-             "Data":data_admissao_esquerda, 
-             "Local":local_de_trabalho_esquerdo, 
+    dados = {"Cpf":cpf, 
+             "Matricula":matricula, 
+             "Empresa Empregadora":empregador, 
+             "Data de Início do Empregado":data_admissao, 
+             "Empresa do Local de Trabalho":local_de_trabalho, 
              "Data da transferência":transf_sucessao, 
-             "Matricula antes da transferência":mat_sucessao,
-             "Empresa antes da transferência":local_sucessao,
+             "Matricula Antes da Transferência":mat_sucessao,
+             "Empresa Antes da Transferência":local_sucessao,
              }
+    
     return dados       
 
 
@@ -93,7 +111,7 @@ def capturar_empregador(xml):
         if match:
            empregador = match.group(1)
         else:
-            empregador = "Erro ao capturar o empregador"
+            empregador = "Erro ao capturar empregador"
     return empregador
 
 def capturar_local_de_trabalho(xml):
@@ -105,7 +123,7 @@ def capturar_local_de_trabalho(xml):
         elif match2:
            local_de_trabalho = match2.group(1)
         else:
-            local_de_trabalho = "Erro ao capturar o local_de_trabalho"
+            local_de_trabalho = "Erro ao capturar local_de_trabalho"
     return local_de_trabalho
 
 def capturar_cpf(xml):
@@ -114,7 +132,7 @@ def capturar_cpf(xml):
         if match:
            cpf = match.group(1)
         else:
-            cpf = "Erro ao capturar o CPF"
+            cpf = "Erro ao capturar CPF"
     return cpf
 
 def capturar_matricula(xml):
@@ -123,7 +141,7 @@ def capturar_matricula(xml):
         if match:
            matricula = match.group(1)
         else:
-            matricula = "Erro ao capturar o matricula"
+            matricula = "Erro ao capturar matricula"
     return matricula
 
 def capturar_data_admissao(xml):
@@ -135,7 +153,7 @@ def capturar_data_admissao(xml):
         elif match2:
             data_admissao = match2.group(1)
         else:
-            data_admissao = "Erro ao capturar o data_admissao"
+            data_admissao = "Erro ao capturar data_admissao"
 
     return data_admissao
 
