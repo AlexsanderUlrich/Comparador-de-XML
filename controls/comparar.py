@@ -24,7 +24,7 @@ def comparador(a, b):
     direito = conteiner(b)
     
     resultado = verificador(esquerdo, direito)    
-    print(f"teste do resultado dentro do comparador{resultado}")       
+    
 
     return resultado
 
@@ -32,8 +32,8 @@ def comparador(a, b):
 
 def verificador(xml_esquerdo, xml_direito):
     divergentes = []
-    texto = []
-      
+    divergentes_painel = []
+    texto = []     
 
     # Itera sobre as chaves de xml_esquerdo
     for item in xml_esquerdo:        
@@ -67,16 +67,15 @@ def verificador(xml_esquerdo, xml_direito):
     else:        
         painel_direito_texto = f"Os dois XML estão identicos"        
         painel_esquerdo_texto = f"Os dois XML estão identicos"
-        painel_direito_dicionario = "Os dois XML estão identicos"       
-        painel_esquerdo_dicionario = "Os dois XML estão identicos"       
+        painel_direito_dicionario = {painel_direito_texto:painel_direito_texto}       
+        painel_esquerdo_dicionario = {painel_esquerdo_texto:painel_esquerdo_texto}      
                
     
     texto.append(painel_esquerdo_texto)
     texto.append(painel_direito_texto)
-    texto.append(painel_esquerdo_dicionario)
-    texto.append(painel_direito_dicionario)
-    print(f"Texto enviado de retorno da comparação: {texto}")
-    return texto
+    divergentes_painel.append(painel_esquerdo_dicionario)
+    divergentes_painel.append(painel_direito_dicionario)    
+    return [texto, divergentes, divergentes_painel]
     
 # -----------------------------------------------------------------------------------------------------conteiner com as informações:
 

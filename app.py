@@ -17,22 +17,22 @@ def main(page: ft.Page):
         if not esquerdo.value:
             esquerdo.label_style = ft.TextStyle(color=ft.colors.TRANSPARENT, size=20)       
         else:
-            esquerdo.label_style = ft.TextStyle(color=ft.colors.LIGHT_BLUE_200, size=20)        
+            esquerdo.label_style = ft.TextStyle(color=ft.colors.LIGHT_BLUE_600, size=20)        
         page.update()
 
     def blur_direito(e):
         if not direito.value:
             direito.label_style = ft.TextStyle(color=ft.colors.TRANSPARENT, size=20)       
         else:
-            direito.label_style = ft.TextStyle(color=ft.colors.LIGHT_BLUE_200, size=20)        
+            direito.label_style = ft.TextStyle(color=ft.colors.LIGHT_BLUE_600, size=20)        
         page.update()    
 
     def focus_esquerdo(e):       
-        esquerdo.label_style = ft.TextStyle(color=ft.colors.LIGHT_BLUE_200, size=20)        
+        esquerdo.label_style = ft.TextStyle(color=ft.colors.LIGHT_BLUE_600, size=20)        
         page.update()
     
     def focus_direito(e):
-        direito.label_style = ft.TextStyle(color=ft.colors.LIGHT_BLUE_200, size=20)
+        direito.label_style = ft.TextStyle(color=ft.colors.LIGHT_BLUE_600, size=20)
         page.update()
         
  # -----------------------------------------------------------------------------------------------------const com os dois campos onde vai ser colado o XML
@@ -115,6 +115,7 @@ def main(page: ft.Page):
 
     #Função para adicionar o conteiner com a resposta da comparação----------------------------------------------------------------------------  
     
+
     def comparar_os_xml(e):
         if xml_esquerdo == []:        
             xml_esquerdo.append(esquerdo.value)
@@ -129,33 +130,31 @@ def main(page: ft.Page):
             xml_direito.append(direito.value)
                           
         comparado = comparar.comparador(xml_esquerdo, xml_direito)
-        resposta_da_comparacao.value = comparado[0]
-        resposta_da_comparacao1.value = comparado[1]
+        resposta_da_comparacao.value = comparado[0][0]
+        resposta_da_comparacao1.value = comparado[0][1]
 
-        atualizar(xml_esquerdo, xml_direito, comparado[0], comparado[1])      
+        divergencias_para_modal = comparado[2]
+      
+        atualizar(xml_esquerdo, xml_direito, divergencias_para_modal)     
 
+        page.update()                  
+
+    #local onde vai ficar o modal---------------------------------------------------------------------------- 
+
+    def atualizar(xml_esquerdo, xml_direito, comparado):
+        global dialog
+        dialog = modal.modal_separado_por_linhas(xml_esquerdo, xml_direito, comparado)            
+        dialog.actions = ft.ElevatedButton("fechar", on_click=lambda e: page.close(dialog), bgcolor=ft.colors.ORANGE_500, color="White"),
+        page.add(
+            dialog
+        )       
         page.update()
-
-        botao_abrir_modal.disabled = False        
-        page.update()
-                  
-
-    #local onde vai ficar o modal----------------------------------------------------------------------------
-       
-
-    
-    print(xml_direito)
-    dialog = modal.modal(xml_esquerdo, xml_direito)
-    dialog.actions = ft.ElevatedButton("fechar", on_click=lambda e: page.close(dialog), bgcolor=ft.colors.ORANGE_500, color="White"),
-
-    def atualizar(xml_esquerdo, xml_direito, comparado_e, comparado_d):
-        dialog = modal.modal_separado_por_linhas(xml_esquerdo, xml_direito, comparado_e, comparado_d)
-        page.update()
+        botao_abrir_modal.disabled = False
+        page.update
 
     def funcoes_do_modal(e):        
         page.open(dialog)
-        page.update()
-        
+        page.update()        
            
 
     #botões de controle----------------------------------------------------------------------------  
@@ -193,8 +192,7 @@ def main(page: ft.Page):
         botao_abrir_modal,
     ],
     expand=True, spacing=10,    
-    ),
-    dialog
+    ),    
     )
     page.update()
 
