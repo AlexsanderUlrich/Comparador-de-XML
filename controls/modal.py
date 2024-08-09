@@ -8,6 +8,7 @@ cpf_regex = re.compile(r"<cpfTrab>(.*?)</cpfTrab>", re.DOTALL)
 matricula_regex = re.compile(r"<matricula>(.*?)</matricula>", re.DOTALL)
 data_admissao_regex = re.compile(r"<dtAdm>(.*?)</dtAdm>", re.DOTALL)
 data_atividade_regex = re.compile(r"<dtIniCondicao>(.*?)</dtIniCondicao>", re.DOTALL)
+data_inicio_regex = re.compile(r"<dtInicio>(.*?)</dtInicio>", re.DOTALL)
 
 empregador_regex = re.compile(r"<ideEmpregador>\s+<tpInsc>[12]</tpInsc>\s+<nrInsc>(.*?)</nrInsc>", re.DOTALL)
 local_de_trabalho_regex = re.compile(r"<localTrabGeral>\s+<tpInsc>[134]</tpInsc>\s+<nrInsc>(.*?)</nrInsc>", re.DOTALL)
@@ -58,19 +59,24 @@ def modal_separado_por_linhas(xml_esquerdo, xml_direito, divergentes):
         if chave in painel_direito:            
             lista_regex_vermelho_direita.append(valor)
 
-     # Cria containers para cada texto
+    # Tags que vão ser coloridas
+    tags_desejadas = ["<Cpf>", "<matricula>", "<dtAdm>", "<nrInsc>", "<dtTransf>", "<matricAnt>", "<dtIniCondicao>", "<dtInicio>"]
+
+    # Cria containers para cada texto
     conteudo_esquerdo = []
     conteudo_direito = []
 
     for item in linhas_esquerdo:
-        if any(valor in item for valor in lista_regex_vermelho_esquerda):
-           conteudo_esquerdo.append(ft.Text(item, color=ft.colors.RED))
+        if any(tag in item for tag in tags_desejadas):
+            if any(valor in item for valor in lista_regex_vermelho_esquerda):
+                conteudo_esquerdo.append(ft.Text(item, color=ft.colors.RED))
         else:
             conteudo_esquerdo.append(ft.Text(item))
             
     for item in linhas_direito:
-        if any(valor in item for valor in lista_regex_vermelho_direita):
-           conteudo_direito.append(ft.Text(item, color=ft.colors.RED))
+        if any(tag in item for tag in tags_desejadas):
+            if any(valor in item for valor in lista_regex_vermelho_direita):
+                conteudo_direito.append(ft.Text(item, color=ft.colors.RED))
         else:
             conteudo_direito.append(ft.Text(item))
     
@@ -151,11 +157,12 @@ def capturar_empregador(xml):
 def capturar_local_de_trabalho(xml):
     for item in xml:
         match1 = local_de_trabalho_regex.search(item)
-        match2 = local_de_trabalho_sistema_regex.search(item)
+        match2 = local_de_trabalho_sistema_regex.search(item)        
         if match1:
            local_de_trabalho = match1.group(1)
         elif match2:
            local_de_trabalho = match2.group(1)
+        
         else:
             local_de_trabalho = "Erro ao capturar local_de_trabalho"
     return local_de_trabalho
@@ -182,10 +189,13 @@ def capturar_data_admissao(xml):
     for item in xml:
         match1 = data_admissao_regex.search(item)
         match2 = data_atividade_regex.search(item)
+        match3 = data_inicio_regex.search(item)
         if match1:
-           data_admissao = match1.group(1)
+            data_admissao = match1.group(1)
         elif match2:
             data_admissao = match2.group(1)
+        elif match3:
+            data_admissao = match3.group(1)
         else:
             data_admissao = "Erro ao capturar data_admissao"
 

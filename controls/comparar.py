@@ -7,6 +7,8 @@ cpf_regex = re.compile(r"<cpfTrab>(.*?)</cpfTrab>", re.DOTALL)
 matricula_regex = re.compile(r"<matricula>(.*?)</matricula>", re.DOTALL)
 data_admissao_regex = re.compile(r"<dtAdm>(.*?)</dtAdm>", re.DOTALL)
 data_atividade_regex = re.compile(r"<dtIniCondicao>(.*?)</dtIniCondicao>", re.DOTALL)
+data_inicio_regex = re.compile(r"<dtInicio>(.*?)</dtInicio>", re.DOTALL)
+
 
 empregador_regex = re.compile(r"<ideEmpregador>\s+<tpInsc>[12]</tpInsc>\s+<nrInsc>(.*?)</nrInsc>", re.DOTALL)
 local_de_trabalho_regex = re.compile(r"<localTrabGeral>\s+<tpInsc>[134]</tpInsc>\s+<nrInsc>(.*?)</nrInsc>", re.DOTALL)
@@ -147,10 +149,13 @@ def capturar_data_admissao(xml):
     for item in xml:
         match1 = data_admissao_regex.search(item)
         match2 = data_atividade_regex.search(item)
+        match3 = data_inicio_regex.search(item)
         if match1:
-           data_admissao = match1.group(1)
+            data_admissao = match1.group(1)
         elif match2:
             data_admissao = match2.group(1)
+        elif match3:
+            data_admissao = match3.group(1)
         else:
             data_admissao = "Erro ao capturar data_admissao"
 
