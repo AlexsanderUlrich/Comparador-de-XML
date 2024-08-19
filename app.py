@@ -140,17 +140,20 @@ def main(page: ft.Page):
         page.update()                  
 
     #local onde vai ficar o modal---------------------------------------------------------------------------- 
-
+    
     def atualizar(xml_esquerdo, xml_direito, comparado):
         global dialog
-        dialog = modal.modal_separado_por_linhas(xml_esquerdo, xml_direito, comparado)            
-        dialog.actions = ft.ElevatedButton("fechar", on_click=lambda e: page.close(dialog), bgcolor=ft.colors.ORANGE_500, color="White"),
-        page.add(
-            dialog
-        )       
-        page.update()
+        if 'dialog' not in globals():
+            dialog = modal.modal_separado_por_linhas(xml_esquerdo, xml_direito, comparado)            
+            dialog.actions = ft.ElevatedButton("fechar", on_click=lambda e: page.close(dialog), bgcolor=ft.colors.ORANGE_500, color="White"),
+            page.add(dialog)
+        else:
+            dialog.content = modal.modal_separado_por_linhas(xml_esquerdo, xml_direito, comparado).content
+            dialog.actions = ft.ElevatedButton("fechar", on_click=lambda e: page.close(dialog), bgcolor=ft.colors.ORANGE_500, color="White"),
+            page.update()
+
         botao_abrir_modal.disabled = False
-        page.update
+        page.update()        
 
     def funcoes_do_modal(e):        
         page.open(dialog)

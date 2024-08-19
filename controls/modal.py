@@ -60,7 +60,7 @@ def modal_separado_por_linhas(xml_esquerdo, xml_direito, divergentes):
             lista_regex_vermelho_direita.append(valor)
 
     # Tags que vão ser coloridas
-    tags_desejadas = ["<Cpf>", "<matricula>", "<dtAdm>", "<nrInsc>", "<dtTransf>", "<matricAnt>", "<dtIniCondicao>", "<dtInicio>"]
+    tags_desejadas = ["<cpfTrab>", "<matricula>", "<dtAdm>", "<nrInsc>", "<dtTransf>", "<matricAnt>", "<dtIniCondicao>", "<dtInicio>"]
 
     # Cria containers para cada texto
     conteudo_esquerdo = []

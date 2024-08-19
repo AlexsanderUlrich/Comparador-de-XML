@@ -65,7 +65,7 @@ def verificador(xml_esquerdo, xml_direito):
             painel_direito_texto += f"\n- {item}: {val2}\n" #salva o texto dos itens diferntes para a exibição na tela
 
             painel_esquerdo_dicionario[item] = val1 #salva os valores diferentes em um dicionário para poder trabalhar com eles mais fácil
-            painel_direito_dicionario[item] = val2  #salva os valores diferentes em um dicionário para poder trabalhar com eles mais fácil         
+            painel_direito_dicionario[item] = val2  #salva os valores diferentes em um dicionário para poder trabalhar com eles mais fácil
     else:        
         painel_direito_texto = f"Os dois XML estão identicos"        
         painel_esquerdo_texto = f"Os dois XML estão identicos"
