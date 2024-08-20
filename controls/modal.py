@@ -32,31 +32,32 @@ def modal_separado_por_linhas(xml_esquerdo, xml_direito, divergentes):
     )         
 
     # Separar os textos em linhas
-    linhas_esquerdo = xml_esquerdo[0].split('\r\n')
-    linhas_direito = xml_direito[0].split('\r\n')   
+    xml_esquerdo_separado_em_linhas = xml_esquerdo[0].split('\r\n')
+    xml_direito_separado_em_linhas = xml_direito[0].split('\r\n')   
 
    
     
     # Tratamento da lista de divergentes, para poder fazer a comparação
-    painel_esquerdo = divergentes[0]
-    painel_direito = divergentes[1]
+    divergencias_no_painel_esquerdo = divergentes[0]
+    divergencias_no_painel_direito = divergentes[1]
 
    
 
     # cria lista com pesquisa Regex e o resultado dela para comparar no conteiner de texto
     lista_regex_vermelho_esquerda = []
-    lista_regex_vermelho_direita = []    
+    lista_regex_vermelho_direita = [] 
+
     conteiner_regex_esquerdo = conteiner(xml_esquerdo)  
     conteiner_regex_direito = conteiner(xml_direito)
     
     
     # Adiciona os valores capturados às listas de divergentes
     for chave, valor in conteiner_regex_esquerdo.items():
-        if chave in painel_esquerdo:
+        if chave in divergencias_no_painel_esquerdo:
             lista_regex_vermelho_esquerda.append(valor)
 
     for chave, valor in conteiner_regex_direito.items():
-        if chave in painel_direito:            
+        if chave in divergencias_no_painel_direito:            
             lista_regex_vermelho_direita.append(valor)
 
     # Tags que vão ser coloridas
@@ -66,14 +67,14 @@ def modal_separado_por_linhas(xml_esquerdo, xml_direito, divergentes):
     conteudo_esquerdo = []
     conteudo_direito = []
 
-    for item in linhas_esquerdo:
+    for item in xml_esquerdo_separado_em_linhas:
         if any(tag in item for tag in tags_desejadas):
             if any(valor in item for valor in lista_regex_vermelho_esquerda):
                 conteudo_esquerdo.append(ft.Text(item, color=ft.colors.RED))
         else:
             conteudo_esquerdo.append(ft.Text(item))
             
-    for item in linhas_direito:
+    for item in xml_direito_separado_em_linhas:
         if any(tag in item for tag in tags_desejadas):
             if any(valor in item for valor in lista_regex_vermelho_direita):
                 conteudo_direito.append(ft.Text(item, color=ft.colors.RED))
@@ -210,7 +211,7 @@ def capturar_sucessao_local(xml):
         if match:
            local = match.group(1)
         else:
-            local = ""
+            local = "Não encontrada sucessão de vinculo"
     return local
 
 def capturar_sucessao_matricula(xml):
@@ -219,7 +220,7 @@ def capturar_sucessao_matricula(xml):
         if match:
            matricula = match.group(1)        
         else:
-            matricula = ""
+            matricula = "Não encontrada sucessão de vinculo"
     return matricula
 
 def capturar_sucessao_transf(xml):
@@ -228,5 +229,5 @@ def capturar_sucessao_transf(xml):
         if match:
            data_transf = match.group(1)                   
         else:
-            data_transf = ""
+            data_transf = "Não encontrada sucessão de vinculo"
     return data_transf

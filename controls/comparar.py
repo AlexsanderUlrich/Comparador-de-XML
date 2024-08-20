@@ -170,7 +170,7 @@ def capturar_sucessao_local(xml):
         if match:
            local = match.group(1)
         else:
-            local = ""
+            local = "Não encontrada sucessão de vinculo"
     return local
 
 def capturar_sucessao_matricula(xml):
@@ -179,7 +179,7 @@ def capturar_sucessao_matricula(xml):
         if match:
            matricula = match.group(1)        
         else:
-            matricula = ""
+            matricula = "Não encontrada sucessão de vinculo"
     return matricula
 
 def capturar_sucessao_transf(xml):
@@ -188,5 +188,5 @@ def capturar_sucessao_transf(xml):
         if match:
            data_transf = match.group(1)                   
         else:
-            data_transf = ""
+            data_transf = "Não encontrada sucessão de vinculo"
     return data_transf

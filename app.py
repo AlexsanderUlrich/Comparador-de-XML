@@ -10,7 +10,7 @@ def main(page: ft.Page):
     xml_esquerdo = []
     xml_direito = []
 
-    header = ft.Text("Comparador de XML", size=50, text_align="Center", color=ft.colors.ORANGE_700, font_family="Georgia", weight=ft.FontWeight.BOLD)
+    header = ft.Image(src="./assets/logo-branco.png", width=150, height=70, fit=ft.ImageFit.CONTAIN)
 
 # -----------------------------------------------------------------------------------------------------funções para a label dos dois principais campos
     def blur_esquerdo(e):
@@ -162,7 +162,7 @@ def main(page: ft.Page):
 
     #botões de controle----------------------------------------------------------------------------  
                 
-    botao_comparar_xml = ft.ElevatedButton("COMPAR OS XML", 
+    botao_comparar_xml = ft.ElevatedButton("COMPARAR OS XML", 
                               icon='FOLDER_COPY_OUTLINED', 
                               icon_color=ft.colors.ORANGE_700, 
                               bgcolor=ft.colors.GREY_700,
