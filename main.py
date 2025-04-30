@@ -10,21 +10,21 @@ def main(page: ft.Page):
     xml_esquerdo = []
     xml_direito = []
 
-    header = ft.Image(src="./assets/logo-branco.png", width=150, height=70, fit=ft.ImageFit.CONTAIN)
-
+    header = ft.Image(src="assets/logo-branco.png", width=150, height=70, fit=ft.ImageFit.CONTAIN, color=ft.colors.WHITE)
+    
 # -----------------------------------------------------------------------------------------------------funções para a label dos dois principais campos
     def blur_esquerdo(e):
         if not esquerdo.value:
-            esquerdo.label_style = ft.TextStyle(color=ft.colors.TRANSPARENT, size=20)       
+            esquerdo.label_style = ft.TextStyle(color=ft.colors.TRANSPARENT, size=20)
         else:
-            esquerdo.label_style = ft.TextStyle(color=ft.colors.LIGHT_BLUE_600, size=20)        
+            esquerdo.label_style = ft.TextStyle(color=ft.colors.LIGHT_BLUE_600, size=20)
         page.update()
 
     def blur_direito(e):
         if not direito.value:
-            direito.label_style = ft.TextStyle(color=ft.colors.TRANSPARENT, size=20)       
+            direito.label_style = ft.TextStyle(color=ft.colors.TRANSPARENT, size=20)
         else:
-            direito.label_style = ft.TextStyle(color=ft.colors.LIGHT_BLUE_600, size=20)        
+            direito.label_style = ft.TextStyle(color=ft.colors.LIGHT_BLUE_600, size=20)
         page.update()    
 
     def focus_esquerdo(e):       
@@ -46,6 +46,7 @@ def main(page: ft.Page):
         bgcolor=ft.colors.WHITE,        
         border_color=ft.colors.LIGHT_BLUE_200,
         border_radius=20,
+        color=ft.colors.BLACK,
         label="XML para a comparação",
         label_style=ft.TextStyle(color=ft.colors.TRANSPARENT, size=20),       
         on_focus=focus_esquerdo,
@@ -61,6 +62,7 @@ def main(page: ft.Page):
         bgcolor=ft.colors.WHITE,       
         border_color=ft.colors.LIGHT_BLUE_200,
         border_radius=20,
+        color=ft.colors.BLACK,
         label="XML para a comparação",
         label_style=ft.TextStyle(color=ft.colors.TRANSPARENT, size=20),        
         on_focus=focus_direito,
