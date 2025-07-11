@@ -10,7 +10,7 @@ def main(page: ft.Page):
     xml_esquerdo = []
     xml_direito = []
 
-    header = ft.Image(src="assets/logo-branco.png", width=150, height=70, fit=ft.ImageFit.CONTAIN, color=ft.colors.WHITE)
+    header = ft.Image(src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg", width=150, height=70, fit=ft.ImageFit.CONTAIN)
     
 # -----------------------------------------------------------------------------------------------------funções para a label dos dois principais campos
     def blur_esquerdo(e):
@@ -204,4 +204,4 @@ def main(page: ft.Page):
     page.update()
 
 #ft.app(target=main)
-ft.app(target=main, view=ft.WEB_BROWSER)
+ft.app(target=main, view=ft.WEB_BROWSER, assets_dir="assets")

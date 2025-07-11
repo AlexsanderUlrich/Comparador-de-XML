@@ -32,16 +32,14 @@ def modal_separado_por_linhas(xml_esquerdo, xml_direito, divergentes):
     )         
 
     # Separar os textos em linhas
-    xml_esquerdo_separado_em_linhas = xml_esquerdo[0].split('\r\n')
-    xml_direito_separado_em_linhas = xml_direito[0].split('\r\n')   
+    xml_esquerdo_separado_em_linhas = xml_esquerdo[0].splitlines()
 
-   
+    xml_direito_separado_em_linhas = xml_direito[0].splitlines()   
     
     # Tratamento da lista de divergentes, para poder fazer a comparação
     divergencias_no_painel_esquerdo = divergentes[0]
     divergencias_no_painel_direito = divergentes[1]
-
-   
+  
 
     # cria lista com pesquisa Regex e o resultado dela para comparar no conteiner de texto
     lista_regex_vermelho_esquerda = []
@@ -55,10 +53,12 @@ def modal_separado_por_linhas(xml_esquerdo, xml_direito, divergentes):
     for chave, valor in conteiner_regex_esquerdo.items():
         if chave in divergencias_no_painel_esquerdo:
             lista_regex_vermelho_esquerda.append(valor)
+            print("Print com os valores", lista_regex_vermelho_esquerda)
 
     for chave, valor in conteiner_regex_direito.items():
-        if chave in divergencias_no_painel_direito:            
+        if chave in divergencias_no_painel_direito:                        
             lista_regex_vermelho_direita.append(valor)
+            print("Print com os valores", lista_regex_vermelho_direita)
 
     # Tags que vão ser coloridas
     tags_desejadas = ["<cpfTrab>", "<matricula>", "<dtAdm>", "<nrInsc>", "<dtTransf>", "<matricAnt>", "<dtIniCondicao>", "<dtInicio>"]
@@ -71,15 +71,21 @@ def modal_separado_por_linhas(xml_esquerdo, xml_direito, divergentes):
         if any(tag in item for tag in tags_desejadas):
             if any(valor in item for valor in lista_regex_vermelho_esquerda):
                 conteudo_esquerdo.append(ft.Text(item, color=ft.colors.RED))
+            else:
+                conteudo_esquerdo.append(ft.Text(item,  color=ft.colors.BLACK))  # adiciona normalmente se tag existe, mas não é divergente
         else:
-            conteudo_esquerdo.append(ft.Text(item))
-            
+            conteudo_esquerdo.append(ft.Text(item,  color=ft.colors.BLACK))  # adiciona normalmente se não tem tag
+
+    # mesmo para o lado direito:
     for item in xml_direito_separado_em_linhas:
         if any(tag in item for tag in tags_desejadas):
             if any(valor in item for valor in lista_regex_vermelho_direita):
                 conteudo_direito.append(ft.Text(item, color=ft.colors.RED))
+            else:
+                conteudo_direito.append(ft.Text(item,  color=ft.colors.BLACK))
         else:
-            conteudo_direito.append(ft.Text(item))
+            conteudo_direito.append(ft.Text(item,  color=ft.colors.BLACK))
+    
     
     # Estrutura da exibição do texto no modal
     esquerdo = ft.ListView(
